@@ -1,0 +1,11 @@
+[server]
+port = 8000
+host = "127.0.0.1"
+
+[paths]
+reference_genome = "/home/drpaul/data_science/jutarget/reference/M._tuberculosis_H37Rv_2015-11-13.fasta"
+minimap2 = "/home/drpaul/.conda/envs/jutarget_env/bin/minimap2"
+samtools = "/usr/bin/samtools"
+bcftools = "/usr/bin/bcftools"
+
+
