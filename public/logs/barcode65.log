@@ -1,18 +1,19 @@
-[M::mm_idx_gen::0.180*1.00] collected minimizers
-[M::mm_idx_gen::0.223*1.36] sorted minimizers
-[M::main::0.223*1.36] loaded/built the index for 1 target sequence(s)
-[M::mm_mapopt_update::0.238*1.34] mid_occ = 17
+[M::mm_idx_gen::0.206*1.00] collected minimizers
+[M::mm_idx_gen::0.272*1.20] sorted minimizers
+[M::main::0.272*1.20] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.288*1.19] mid_occ = 17
 [M::mm_idx_stat] kmer size: 15; skip: 10; is_hpc: 0; #seq: 1
-[M::mm_idx_stat::0.249*1.33] distinct minimizers: 778043 (96.12% are singletons); average occurrences: 1.057; average spacing: 5.363; total length: 4411532
-[M::worker_pipeline::1.706*2.43] mapped 16784 sequences
+[M::mm_idx_stat::0.300*1.18] distinct minimizers: 778043 (96.12% are singletons); average occurrences: 1.057; average spacing: 5.363; total length: 4411532
+[M::worker_pipeline::1.977*2.13] mapped 16784 sequences
 [M::main] Version: 2.30-r1287
 [M::main] CMD: /home/drpaul/.conda/envs/jutarget_env/bin/minimap2 -ax map-ont -t 4 /home/drpaul/data_science/jutarget/reference/M._tuberculosis_H37Rv_2015-11-13.fasta /home/drpaul/juTarget_output/0_concatenated/barcode65.fastq.gz
-[M::main] Real time: 1.722 sec; CPU: 4.166 sec; Peak RSS: 0.918 GB
-[mpileup] 1 samples in 1 input files
+[M::main] Real time: 2.004 sec; CPU: 4.230 sec; Peak RSS: 0.650 GB
 Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
 [mpileup] maximum number of reads per input file set to -d 250
 --> Starting Julia-native RD-Analyzer...
---> RD-Analyzer finished successfully. Report at /home/drpaul/juTarget_output/barcode65/rd_analyzer_report.txt
---> Starting Minimap2 Alignment...
---> Starting SAM to Sorted BAM conversion...
---> Starting Variant Calling (bcftools)...
+--> Starting Julia-native VCF filtering...
+--> VCF filtering complete. Passed: 26
+--> Starting AI Resistance Prediction...
+--> Archiving results to centralized database...
+--> Results successfully archived to: /home/drpaul/juTarget_results/barcode65_2026-02-14_155723

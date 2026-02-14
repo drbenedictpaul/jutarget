@@ -3,143 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>juTarget | M.tb TNGS Analysis</title>
+    <title>juTarget | Targeted NGS Analysis</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { border-bottom: 2px solid #5a4b81; padding-bottom: 10px; color: #5a4b81; }
-        .controls { margin: 20px 0; display: flex; gap: 10px; }
-        button { background-color: #5a4b81; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:hover { background-color: #483d66; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 90vh; }
+        .container { width: 100%; max-width: 1200px; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; margin-bottom: 30px; }
+        .header { background-color: #5a4b81; color: white; padding: 20px; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .tabs { display: flex; background: #483d66; }
+        .tab { padding: 15px 25px; color: #ccc; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .tab:hover { color: white; background: #5a4b81; }
+        .tab.active { background: white; color: #5a4b81; border-top: 3px solid #9c27b0; }
+        .content { padding: 30px; display: none; }
+        .content.active { display: block; }
+        
+        button { background-color: #5a4b81; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
         button:disabled { background-color: #ccc; cursor: not-allowed; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
         th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }
-        th { background-color: #f8f8f8; font-weight: 600; }
-        .progress-bar { width: 100%; background-color: #e0e0e0; border-radius: 4px; overflow: hidden; height: 10px; }
-        .progress-fill { height: 100%; background-color: #4caf50; width: 0%; transition: width 0.3s; }
+        th { background-color: #f8f8f8; font-weight: 600; color: #555; }
+        
         .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .status-Queued { background-color: #ffe0b2; color: #e65100; }
-        .status-Running { background-color: #bbdefb; color: #0d47a1; }
-        .status-Completed { background-color: #c8e6c9; color: #1b5e20; }
-        .status-Failed { background-color: #ffcdd2; color: #b71c1c; }
+        .status-Queued { background: #ffe0b2; color: #e65100; }
+        .status-Running, .status-Aligning { background: #bbdefb; color: #0d47a1; }
+        .status-Completed { background: #c8e6c9; color: #1b5e20; }
+        .status-Failed { background: #ffcdd2; color: #b71c1c; }
+
+        /* Results Layout */
+        .results-container { display: flex; height: 500px; border: 1px solid #eee; }
+        .sidebar { width: 250px; background: #fafafa; border-right: 1px solid #ddd; overflow-y: auto; }
+        .result-view { flex: 1; padding: 20px; overflow-y: auto; }
+        .sidebar-item { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; font-size: 13px; }
+        .sidebar-item:hover { background: #eee; }
+        .sidebar-item.selected { background: #e1bee7; color: #4a148c; border-left: 4px solid #9c27b0; font-weight: bold; }
+        
+        .res-RESISTANT { color: #d32f2f; font-weight: bold; }
+        .res-SUSCEPTIBLE { color: #388e3c; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 4px; border: 1px solid #ddd; white-space: pre-wrap; font-size: 12px; }
+
+        /* Footer - Outside Container */
+        .app-footer { text-align: center; font-size: 13px; color: #666; line-height: 1.6; }
+        .app-footer a { color: #007bff; text-decoration: none; }
+        .app-footer a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>juTarget <span style="font-size: 0.6em; color: #666;">Targeted NGS Analysis for M. tuberculosis</span></h1>
+    <div class="header">
+        <h1>juTarget <span style="font-size: 0.6em; opacity: 0.8;">Targeted NGS Analysis</span></h1>
+    </div>
     
-    <div class="controls">
-        <button id="btnStart" onclick="startPipeline()">Start Analysis</button>
-        <button onclick="fetchStatus()">Refresh Status</button>
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('run')">Run Pipeline</div>
+        <div class="tab" onclick="switchTab('results')">View Results</div>
     </div>
 
-    <div id="messageArea" style="margin-bottom: 15px; font-weight: bold;"></div>
+    <!-- RUN TAB -->
+    <div id="tab-run" class="content active">
+        <button id="btnStart" onclick="startPipeline()">Start Analysis</button>
+        <span id="messageArea" style="margin-left: 15px; font-weight: bold;"></span>
+        <table id="statusTable">
+            <thead><tr><th>Sample</th><th>Status</th><th>Progress</th><th>Logs</th></tr></thead>
+            <tbody><tr><td colspan="4" style="text-align:center;">No jobs running.</td></tr></tbody>
+        </table>
+    </div>
 
-    <table id="statusTable">
-        <thead>
-            <tr>
-                <th>Sample Name</th>
-                <th>Status</th>
-                <th>Progress</th>
-                <th>Logs</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Rows will be inserted here -->
-        </tbody>
-    </table>
+    <!-- RESULTS TAB -->
+    <div id="tab-results" class="content">
+        <button onclick="loadResultsList()" style="margin-bottom: 10px; font-size: 12px;">Refresh List</button>
+        <div class="results-container">
+            <div class="sidebar" id="resultsList">
+                <div style="padding:15px; color:#999;">Loading...</div>
+            </div>
+            <div class="result-view" id="resultContent">
+                <div style="color:#999; margin-top:50px; text-align:center;">Select a result to view details.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-footer">
+    <i>Developed by</i><br>
+    Dr. Benedict Christopher Paul<br>
+    <a href="http://www.drpaul.cc" target="_blank">www.drpaul.cc</a>
 </div>
 
 <script>
-    let pollingInterval = null;
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+        if(tab === 'run') {
+            document.querySelector('.tab:nth-child(1)').classList.add('active');
+            document.getElementById('tab-run').classList.add('active');
+        } else {
+            document.querySelector('.tab:nth-child(2)').classList.add('active');
+            document.getElementById('tab-results').classList.add('active');
+            loadResultsList();
+        }
+    }
 
+    let pollInt = null;
     async function startPipeline() {
         const btn = document.getElementById('btnStart');
         const msg = document.getElementById('messageArea');
-        btn.disabled = true;
-        msg.innerText = "Starting pipeline...";
-        
+        btn.disabled = true; msg.innerText = "Starting...";
         try {
             const res = await fetch('/start-pipeline', { method: 'POST' });
             const data = await res.json();
-            
             msg.innerText = data.message;
-            if (data.success) {
-                msg.style.color = "green";
-                startPolling();
-            } else {
-                msg.style.color = "red";
-                btn.disabled = false;
-            }
-        } catch (e) {
-            msg.innerText = "Error connecting to server.";
-            btn.disabled = false;
-        }
+            if(data.success) { msg.style.color = "green"; startPolling(); }
+            else { msg.style.color = "red"; btn.disabled = false; }
+        } catch(e) { msg.innerText = "Error connecting."; btn.disabled = false; }
     }
 
     async function fetchStatus() {
         try {
             const res = await fetch('/get-status');
             const data = await res.json();
-            updateTable(data);
-        } catch (e) {
-            console.error("Status fetch failed", e);
-        }
+            const tbody = document.querySelector('#statusTable tbody');
+            const samples = Object.keys(data).sort();
+            if(samples.length === 0) return;
+            tbody.innerHTML = '';
+            let allDone = true;
+            samples.forEach(s => {
+                const info = data[s];
+                if(info.status !== 'Completed' && info.status !== 'Failed') allDone = false;
+                const css = info.status.split(' ')[0];
+                tbody.innerHTML += `<tr><td>${s}</td><td><span class="status-badge status-${css}">${info.status}</span></td>
+                <td><div style="background:#eee;height:8px;width:100%"><div style="background:#4caf50;height:100%;width:${info.progress}%"></div></div></td>
+                <td><a href="/logs/${s}.log" target="_blank">Log</a></td></tr>`;
+            });
+            if(allDone && pollInt) {
+                clearInterval(pollInt); pollInt = null;
+                document.getElementById('btnStart').disabled = false;
+                document.getElementById('messageArea').innerText = "Done.";
+                loadResultsList();
+            }
+        } catch(e) {}
     }
-
-    function updateTable(data) {
-        const tbody = document.querySelector('#statusTable tbody');
-        tbody.innerHTML = '';
-        
-        // Sort keys to keep table stable
-        const samples = Object.keys(data).sort();
-        
-        if (samples.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No jobs running. Place FASTQ files in ~/juTarget_input</td></tr>';
-            return;
-        }
-
-        let allDone = true;
-
-        samples.forEach(sample => {
-            const info = data[sample];
-            const isDone = info.status === 'Completed' || info.status === 'Failed';
-            if (!isDone) allDone = false;
-
-            // Extract main status word (e.g., "Running (Aligning)" -> "Running") for CSS
-            const cssStatus = info.status.split(' ')[0]; 
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${sample}</td>
-                <td><span class="status-badge status-${cssStatus}">${info.status}</span></td>
-                <td>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${info.progress}%"></div>
-                    </div>
-                </td>
-                <td><a href="/logs/${sample}.log" target="_blank">View Log</a></td>
-            `;
-            tbody.appendChild(tr);
-        });
-
-        if (allDone && samples.length > 0 && pollingInterval) {
-            clearInterval(pollingInterval);
-            pollingInterval = null;
-            document.getElementById('btnStart').disabled = false;
-            document.getElementById('messageArea').innerText = "Analysis Completed.";
-        }
-    }
-
-    function startPolling() {
-        if (pollingInterval) clearInterval(pollingInterval);
-        fetchStatus();
-        pollingInterval = setInterval(fetchStatus, 2000);
-    }
-
-    // Initial check
+    
+    function startPolling() { if(pollInt) clearInterval(pollInt); fetchStatus(); pollInt = setInterval(fetchStatus, 2000); }
     fetchStatus();
+
+    async function loadResultsList() {
+        const list = document.getElementById('resultsList');
+        try {
+            const res = await fetch('/list-results');
+            const folders = await res.json();
+            list.innerHTML = '';
+            if(folders.length === 0) { list.innerHTML = '<div style="padding:15px;color:#999">No results found.</div>'; return; }
+            folders.forEach(f => {
+                const item = document.createElement('div');
+                item.className = 'sidebar-item';
+                item.innerText = f;
+                item.onclick = () => loadDetail(f, item);
+                list.appendChild(item);
+            });
+        } catch(e) { list.innerHTML = '<div style="padding:15px;color:red">Load error.</div>'; }
+    }
+
+    async function loadDetail(folder, el) {
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('selected'));
+        el.classList.add('selected');
+        const view = document.getElementById('resultContent');
+        view.innerHTML = 'Loading...';
+        try {
+            const res = await fetch(`/get-result-data/${folder}`);
+            const data = await res.json();
+            if(!data.success) { view.innerHTML = 'Error reading data.'; return; }
+            let html = `<div style="display:flex; justify-content:space-between; align-items:center;"><h2>${folder}</h2><a href="/print-report/${folder}" target="_blank"><button style="background-color:#00796b; font-size:13px;">Print Official Report</button></a></div><h3>Drug Resistance Profile</h3><table><thead><tr><th>Drug</th><th>Prediction</th><th>Mutation</th><th>Mechanism</th></tr></thead><tbody>`;
+            data.drug_report.forEach(r => {
+                const cls = r.Prediction === 'RESISTANT' ? 'res-RESISTANT' : 'res-SUSCEPTIBLE';
+                html += `<tr><td><b>${r.Drug}</b></td><td class="${cls}">${r.Prediction}</td><td>${r.Evidence}</td><td>${r.Mechanism}</td></tr>`;
+            });
+            html += `</tbody></table><h3>RD-Analyzer Report</h3><pre>${data.rd_report}</pre>`;
+            view.innerHTML = html;
+        } catch(e) { view.innerHTML = 'Error.'; }
+    }
 </script>
 
 </body>
