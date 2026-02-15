@@ -36,3 +36,5 @@ deps/usr/
 .env
 
 *.csv
+*.tar.gz
+*.tar

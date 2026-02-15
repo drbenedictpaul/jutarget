@@ -1,0 +1,12 @@
+[server]
+port = 8000
+host = "0.0.0.0"
+
+[paths]
+# In Docker, we place references in /app/reference
+reference_genome = "/app/reference/M._tuberculosis_H37Rv_2015-11-13.fasta"
+
+# apt-get installs tools to standard /usr/bin
+minimap2 = "/usr/bin/minimap2"
+samtools = "/usr/bin/samtools"
+bcftools = "/usr/bin/bcftools"

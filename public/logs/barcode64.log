@@ -1,13 +1,13 @@
-[M::mm_idx_gen::0.191*1.00] collected minimizers
-[M::mm_idx_gen::0.233*1.35] sorted minimizers
-[M::main::0.233*1.35] loaded/built the index for 1 target sequence(s)
-[M::mm_mapopt_update::0.248*1.33] mid_occ = 17
+[M::mm_idx_gen::0.270*1.00] collected minimizers
+[M::mm_idx_gen::0.327*1.17] sorted minimizers
+[M::main::0.327*1.17] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.348*1.16] mid_occ = 17
 [M::mm_idx_stat] kmer size: 15; skip: 10; is_hpc: 0; #seq: 1
-[M::mm_idx_stat::0.259*1.32] distinct minimizers: 778043 (96.12% are singletons); average occurrences: 1.057; average spacing: 5.363; total length: 4411532
-[M::worker_pipeline::2.079*2.62] mapped 23589 sequences
+[M::mm_idx_stat::0.363*1.15] distinct minimizers: 778043 (96.12% are singletons); average occurrences: 1.057; average spacing: 5.363; total length: 4411532
+[M::worker_pipeline::3.166*1.81] mapped 23589 sequences
 [M::main] Version: 2.30-r1287
 [M::main] CMD: /home/drpaul/.conda/envs/jutarget_env/bin/minimap2 -ax map-ont -t 4 /home/drpaul/data_science/jutarget/reference/M._tuberculosis_H37Rv_2015-11-13.fasta /home/drpaul/juTarget_output/0_concatenated/barcode64.fastq.gz
-[M::main] Real time: 2.094 sec; CPU: 5.469 sec; Peak RSS: 0.632 GB
+[M::main] Real time: 3.181 sec; CPU: 5.735 sec; Peak RSS: 0.661 GB
 [mpileup] 1 samples in 1 input files
 Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
 [mpileup] maximum number of reads per input file set to -d 250
@@ -16,4 +16,4 @@ Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all site
 --> VCF filtering complete. Passed: 16
 --> Starting AI Resistance Prediction...
 --> Archiving results to centralized database...
---> Results successfully archived to: /home/drpaul/juTarget_results/barcode64_2026-02-14_155713
+--> Results successfully archived to: /home/drpaul/juTarget_results/barcode64_2026-02-15_143442
