@@ -7,12 +7,11 @@ void get_file_content(const char *filename, char *buffer, size_t size) {
     FILE *f = fopen(filename, "r");
     if (f) {
         if (fgets(buffer, size, f)) {
-            // Remove newline characters
             buffer[strcspn(buffer, "\n")] = 0;
         }
         fclose(f);
     } else {
-        printf("Error: Run with sudo to read hardware IDs.\n");
+        printf("Error: Could not read hardware IDs. Please run with sudo.\n");
         exit(1);
     }
 }
@@ -24,25 +23,19 @@ int main() {
     char baseboard_id[256] = {0};
     char command[2048];
     
-    // 1. Print Banner
     printf("======================================================\n");
     printf("      juTarget v1.0 - Targeted NGS Analysis\n");
     printf("           Developed by: Dr. Benedict Christopher Paul\n");
     printf("======================================================\n\n");
 
-    // 2. Read Hardware IDs directly from system files
     get_file_content("/sys/class/dmi/id/product_uuid", uuid, sizeof(uuid));
     get_file_content("/sys/class/dmi/id/product_serial", sys_serial, sizeof(sys_serial));
     get_file_content("/sys/class/dmi/id/board_serial", board_serial, sizeof(board_serial));
 
-    // Construct Baseboard ID format: /SystemSerial/BoardSerial/
     snprintf(baseboard_id, sizeof(baseboard_id), "/%s/%s/", sys_serial, board_serial);
 
-    printf("Verifying Hardware License...\n");
-    printf("UUID: %s\n", uuid);
-    printf("ID:   %s\n\n", baseboard_id);
+    printf("Verifying Hardware License...\n\n");
 
-    // 3. Setup Directories
     system("mkdir -p ~/juTarget_input");
     system("mkdir -p ~/juTarget_output");
     system("mkdir -p ~/juTarget_results");
@@ -50,8 +43,6 @@ int main() {
     printf("Press [Enter] to launch application...");
     getchar();
 
-    // 4. Construct the Docker Command (Hidden from user)
-    // We pass the IDs we just read into the container
     snprintf(command, sizeof(command), 
         "docker run -it --rm "
         "-p 8000:8000 "
@@ -62,7 +53,6 @@ int main() {
         "-e JUTARGET_HW_BASEBOARD=\"%s\" "
         "jutarget_app", uuid, baseboard_id);
 
-    // 5. Execute Docker
     system(command);
 
     return 0;
