@@ -1,0 +1,17 @@
+# Ignore the Docker image itself to prevent feedback loop
+jutarget_app.tar.gz
+
+# Ignore any other archives
+*.zip
+*.tar.gz
+
+# Ignore version control history
+.git
+.gitignore
+
+# Ignore the C source file (not needed in the final image)
+launcher.c
+
+# Ignore local output/data directories if they exist
+juTarget_output/
+juTarget_input/

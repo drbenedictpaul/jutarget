@@ -1,19 +1,19 @@
-[M::mm_idx_gen::0.270*1.00] collected minimizers
-[M::mm_idx_gen::0.327*1.17] sorted minimizers
-[M::main::0.327*1.17] loaded/built the index for 1 target sequence(s)
-[M::mm_mapopt_update::0.348*1.16] mid_occ = 17
+[M::mm_idx_gen::0.218*0.90] collected minimizers
+[M::mm_idx_gen::0.263*1.24] sorted minimizers
+[M::main::0.263*1.24] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.282*1.22] mid_occ = 17
 [M::mm_idx_stat] kmer size: 15; skip: 10; is_hpc: 0; #seq: 1
-[M::mm_idx_stat::0.363*1.15] distinct minimizers: 778043 (96.12% are singletons); average occurrences: 1.057; average spacing: 5.363; total length: 4411532
-[M::worker_pipeline::3.166*1.81] mapped 23589 sequences
-[M::main] Version: 2.30-r1287
-[M::main] CMD: /home/drpaul/.conda/envs/jutarget_env/bin/minimap2 -ax map-ont -t 4 /home/drpaul/data_science/jutarget/reference/M._tuberculosis_H37Rv_2015-11-13.fasta /home/drpaul/juTarget_output/0_concatenated/barcode64.fastq.gz
-[M::main] Real time: 3.181 sec; CPU: 5.735 sec; Peak RSS: 0.661 GB
-[mpileup] 1 samples in 1 input files
+[M::mm_idx_stat::0.293*1.22] distinct minimizers: 778043 (96.12% are singletons); average occurrences: 1.057; average spacing: 5.363; total length: 4411532
+[M::worker_pipeline::2.128*2.60] mapped 23589 sequences
+[M::main] Version: 2.27-r1193
+[M::main] CMD: /usr/bin/minimap2 -ax map-ont -t 4 /app/reference/M._tuberculosis_H37Rv_2015-11-13.fasta /root/juTarget_output/0_concatenated/barcode64.fastq.gz
+[M::main] Real time: 2.137 sec; CPU: 5.537 sec; Peak RSS: 0.657 GB
 Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
 [mpileup] maximum number of reads per input file set to -d 250
 --> Starting Julia-native RD-Analyzer...
 --> Starting Julia-native VCF filtering...
---> VCF filtering complete. Passed: 16
+--> VCF filtering complete. Passed: 14
 --> Starting AI Resistance Prediction...
 --> Archiving results to centralized database...
---> Results successfully archived to: /home/drpaul/juTarget_results/barcode64_2026-02-15_143442
+--> Results successfully archived to: /root/juTarget_results/barcode64_2026-02-17_073018
