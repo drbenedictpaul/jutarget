@@ -38,3 +38,26 @@ deps/usr/
 *.csv
 *.tar.gz
 *.tar
+
+
+# --- Proprietary / Patent-Pending Files ---
+# Ignore the secret ML code module
+src/jutarget_ml.jl
+
+# Ignore the trained model and data, as they are part of the IP
+reference/chem_resistance_model.jld2
+reference/training_data.csv
+
+
+# --- Standard Julia ignores ---
+/Manifest.toml
+*.log
+*.so
+*.dll
+*.dylib
+*.stacktrace
+
+# --- Build artifacts ---
+jutarget_app.tar.gz
+juTarget_Distribution.tar.gz
+run_jutarget
