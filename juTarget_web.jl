@@ -221,3 +221,5 @@ println("\nStarting server...")
 mkpath(INPUT_DIR); mkpath(OUTPUT_DIR); mkpath(ARCHIVE_DIR)
 
 Genie.up(8001, "0.0.0.0", async=false)
+
+# Final version for distribution
